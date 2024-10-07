@@ -8,9 +8,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Exception;
 use Symfony\Polyfill\Intl\Normalizer\Normalizer as NormalizerNormalizer;
+use App\Http\Controllers\MoodleServiceController;
 
 class PostAlunoController extends Controller
 {
+
+    protected $moodleService;
+    public function __construct(MoodleServiceController $moodleService)
+    {
+        $this->moodleService = $moodleService;
+    }
 
     public function getAluno($date)
     {
@@ -58,7 +65,9 @@ class PostAlunoController extends Controller
             $paramUsers = $this->formatUserParameters($usr);
 
             try {
-                $usrId = $this->insertUser($paramUsers);
+                $usrResult = $this->insertUser($paramUsers);
+                $usrId = $usrResult['usrid'];
+                $usrExcept = $usrResult['exception'];
                 $courseId = $this->getCourse($usr['course1']);
                 $groupId = $this->getGroup($courseId, $usr['group1']);
                 $enrolmentStatus = $this->enrolUser($usrId, $courseId, $usr['enrolstatus1'], $groupId);
@@ -91,7 +100,7 @@ class PostAlunoController extends Controller
         $html .= "</table>" . 'Total: ' . $successCount . ' Data: ' . $date;
         "</div>";
         //return $html;
-        return view('professor', compact('html'));
+        return view('aluno', compact('html'));
     }
 
     private function formatUserParameters($userData)
@@ -125,21 +134,21 @@ class PostAlunoController extends Controller
         ];
     }
 
-    private function postToMoodle($function, $key, $value)
-    {
-        $response = Http::asForm()->post(TokenServiceController::MOODLE_URL, [
-            'wstoken' => TokenServiceController::TOKEN,
-            'wsfunction' => $function,
-            'moodlewsrestformat' => 'json',
-            $key => $value,
-        ]);
+    // private function postToMoodle($function, $key, $value)
+    // {
+    //     $response = Http::asForm()->post(TokenServiceController::MOODLE_URL, [
+    //         'wstoken' => TokenServiceController::TOKEN,
+    //         'wsfunction' => $function,
+    //         'moodlewsrestformat' => 'json',
+    //         $key => $value,
+    //     ]);
 
-        if ($response->failed()) {
-            throw new Exception('Falha na comunicação com a API do Moodle.');
-        }
+    //     if ($response->failed()) {
+    //         throw new Exception('Falha na comunicação com a API do Moodle.');
+    //     }
 
-        return json_decode($response->body()); // Decodificar JSON para objetos
-    }
+    //     return json_decode($response->body()); // Decodificar JSON para objetos
+    // }
 
     private function insertUser($paramUsers)
     {
@@ -147,15 +156,17 @@ class PostAlunoController extends Controller
         $key = 'users';
         $value = $paramUsers['users'];
 
-        $usr = $this->postToMoodle($functionCreate, $key, $value);
+        $usr = $this->moodleService->postToMoodle($functionCreate, $key, $value);
         $usrname = $paramUsers['users'][0]['username'];
 
         if (isset($usr->exception)) {
             $usrid = $this->getUser($usrname);
+            return ['usrid' => $usrid, 'exception' => 1];
             //$this->updateUser($paramUsers, $usrid);
-            return $usrid;
+            //return $usrid;
         } else {
-            return $usr[0]->id;
+            return ['usrid' => $usr[0]->id, 'exception' => 0];
+            //return $usr[0]->id;
         }
     }
 
@@ -167,7 +178,7 @@ class PostAlunoController extends Controller
         $key = 'criteria';
         $value = $paramsGetUser['criteria'];
 
-        $user = $this->postToMoodle($functionGetUser, $key, $value);
+        $user = $this->moodleService->postToMoodle($functionGetUser, $key, $value);
 
         return $user->users[0]->id;
     }
@@ -204,7 +215,7 @@ class PostAlunoController extends Controller
     {
         $functionGetCourse = 'core_course_get_courses';
 
-        $allCourses = $this->postToMoodle($functionGetCourse, null, null);
+        $allCourses = $this->moodleService->postToMoodle($functionGetCourse, null, null);
 
         return $this->findCourseIdByShortname($allCourses, $courseShortname);
 
@@ -224,7 +235,7 @@ class PostAlunoController extends Controller
             ]
         ];
 
-        $this->postToMoodle($functionEnrol, 'enrolments', $paramsEnrol['enrolments']);
+        $this->moodleService->postToMoodle($functionEnrol, 'enrolments', $paramsEnrol['enrolments']);
 
         if ($enrolStatus === '0') {
             $this->addGroup($groupId, $usrId);
@@ -252,7 +263,7 @@ class PostAlunoController extends Controller
         $key = 'courseid';
         $value = $courseId;
 
-        $groups = $this->postToMoodle($functionGetGroup, $key, $value);
+        $groups = $this->moodleService->postToMoodle($functionGetGroup, $key, $value);
 
         $groupId = $this->findGroupIdByName($groups, $groupName);
 
@@ -269,7 +280,7 @@ class PostAlunoController extends Controller
     //     $updateUsers = array_merge(['id' => $id], $paramUsers['users'][0]);
     //     $paramUsers['users'][0] = $updateUsers;
 
-    //     $this->postToMoodle($functionUpdate, 'users', $paramUsers['users']);
+    //     $this->moodleService->postToMoodle($functionUpdate, 'users', $paramUsers['users']);
     // }
 
     private function createGroup($courseId, $groupName)
@@ -288,7 +299,7 @@ class PostAlunoController extends Controller
         $key = 'groups';
         $value = $paramsCgroup['groups'];
 
-        $data = $this->postToMoodle($functionCreateGroup, $key, $value);
+        $data = $this->moodleService->postToMoodle($functionCreateGroup, $key, $value);
 
         if (is_array($data) && isset($data[0]->id)) {
             return $data[0]->id;
@@ -309,7 +320,7 @@ class PostAlunoController extends Controller
             ]
         ];
 
-        $this->postToMoodle($functionAddGroup, 'members', $paramsAddGroup['members']);
+        $this->moodleService->postToMoodle($functionAddGroup, 'members', $paramsAddGroup['members']);
     }
 
     private function deleteGroup($groupId, $usrId)
@@ -324,7 +335,7 @@ class PostAlunoController extends Controller
             ]
         ];
 
-        $this->postToMoodle($functionDelGroup, 'members', $paramsDelGroup['members']);
+        $this->moodleService->postToMoodle($functionDelGroup, 'members', $paramsDelGroup['members']);
     }
 
     public function handleForm(Request $request)

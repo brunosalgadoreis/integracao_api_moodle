@@ -33,7 +33,7 @@
                     <option value="" selected="selected">Escolha uma ação</option>
                     <option value="get">Get Aluno Data</option>
                     <option value="get2" disabled>Get Aluno De/Até</option>
-                    <option value="import" disabled>Import Aluno Data</option>
+                    <option value="import">Import Aluno Data</option>
                 </select>
             </div>
             <button type="submit" class="btn btn-primary">Enviar</button>

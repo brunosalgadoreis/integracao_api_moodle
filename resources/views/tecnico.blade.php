@@ -10,7 +10,7 @@
 
 <body>
     <div class="container border border-dark rounded mt-1 pb-2">
-        <h1>Professor</h1>
+        <h1>Tecnico</h1>
         @include('navbar')
         <form action="{{ route('tecnico.action') }}" method="POST">
             @csrf

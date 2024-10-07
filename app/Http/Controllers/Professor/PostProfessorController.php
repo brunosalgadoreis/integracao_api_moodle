@@ -65,13 +65,21 @@ class PostProfessorController extends Controller
             $paramUsers = $this->formatUserParameters($usr);
 
             try {
-                $usrId = $this->insertUser($paramUsers);
+                $usrResult = $this->insertUser($paramUsers);
+                $usrId = $usrResult['usrid'];
+                $usrExcept = $usrResult['exception'];
                 $courseId = $this->getCourse($usr['course1']);
                 $groupId = $this->getGroup($courseId, $usr['group1']);
                 $this->enrolProfSala($usrId);
                 $enrolmentStatus = $this->enrolUser($usrId, $courseId, $usr['enrolstatus1'], $groupId);
 
-                $html .= "<tr>
+                if ($usrExcept == 0) {
+                    $rowClass = 'table-success';  // Fundo verde para novos usuários
+                } else {
+                    $rowClass = '';  // Sem cor para usuários já existentes
+                }
+
+                $html .= "<tr <tr class='{$rowClass}'>
                     <td>{$usr['enrolstatus1']}</td>
                     <td>{$usrId}</td>
                     <td>{$usr['username']}</td>
@@ -208,12 +216,16 @@ class PostProfessorController extends Controller
         $usr = $this->moodleService->postToMoodle($functionCreate, $key, $value);
         $usrname = $paramUsers['users'][0]['username'];
 
+        //return $usr[0]->id;
+
         if (isset($usr->exception)) {
             $usrid = $this->getUser($usrname);
+            return ['usrid' => $usrid, 'exception' => 1];
             //$this->updateUser($paramUsers, $usrid);
-            return $usrid;
+            //return $usrid;
         } else {
-            return $usr[0]->id;
+            return ['usrid' => $usr[0]->id, 'exception' => 0];
+            //return $usr[0]->id;
         }
     }
 

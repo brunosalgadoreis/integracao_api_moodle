@@ -330,14 +330,14 @@ class PostTecnicoController extends Controller
 
     public function handleForm(Request $request)
     {
-        $date = $request->input('username');
+        $username = $request->input('username');
         $action = $request->input('action');
 
         // Redirecionar para a rota correta
 
 
         if ($action === 'import') {
-            return redirect()->route('import.diretor', ['date' => $date]);
+            return redirect()->route('import.tecnico', ['username' => $username]);
         }
 
 

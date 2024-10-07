@@ -51,7 +51,7 @@ Route::get('/getAluno/{date1}/{date2}', [GetAlunoController::class, 'getAlunoDat
 
 //Post Aluno--
 
-Route::get('/importAluno/{date}', [PostAlunoController::class, 'importaluno']);
+Route::get('/importAluno/{date}', [PostAlunoController::class, 'importaluno'])->name('import.aluno');;
 
 
 //Get Diretor

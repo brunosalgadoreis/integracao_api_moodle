@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Exception;
 use Symfony\Polyfill\Intl\Normalizer\Normalizer as NormalizerNormalizer;
+use Carbon\Carbon;
 
 class PostDiretorController extends Controller
 {
@@ -39,8 +40,9 @@ class PostDiretorController extends Controller
     {
         date_default_timezone_set('America/Sao_Paulo');
         set_time_limit(5000);
-
+ 
         $diretorResponse = $this->getDiretor();
+
         $data = $diretorResponse->getData(true);
 
         $successCount = 0;
@@ -59,11 +61,18 @@ class PostDiretorController extends Controller
                     <th>Curso</th>
                     <th>ID Grupo</th>
                     <th>Grupo</th>
+                    <th>Data</th>
                 </tr>";
 
         foreach ($data as $usr) {
 
-            if ($usr['username'] === $username && $usr['enrolstatus1'] === '0') {
+            $json = substr($usr['createdAt'], 0, 10);
+            $date = Carbon::createFromFormat('Y-m-d', $json);
+            $formattedDate = $date->format('d-m-Y');
+
+            $comparisonDate = Carbon::createFromFormat('d-m-Y', '13-07-2024');
+
+            if ($usr['username'] === $username && $usr['enrolstatus1'] === '0' && $date->greaterThan($comparisonDate)) {
                 $paramUsers = $this->formatUserParameters($usr);
 
                 $usrId = $this->insertUser($paramUsers);
@@ -83,6 +92,7 @@ class PostDiretorController extends Controller
                         <td>{$usr['course1']}</td>
                         <td>{$groupId}</td>
                         <td>{$usr['group1']}</td>
+                        <td>{$formattedDate}</td>
                       </tr>";
 
                     if ($enrolmentStatus != null) {
