@@ -19,20 +19,20 @@
                     placeholder="dd-mm-aaaa">
             </div>
 
-            <!-- <div id="additional-inputs" style="display: none;">
+            <!--<div id="additional-inputs" style="display: none;">
                 <div class="form-group">
-                    <label for="date">Data Fim (dd-mm-aaaa):</label>
+                    <label for="date2">Data Fim (dd-mm-aaaa):</label>
                     <input type="text" id="extra-input" name="extra_input" class="form-control" required pattern="\d{2}-\d{2}-\d{4}"
                         placeholder="dd-mm-aaaa">
                 </div>
-            </div> -->
+            </div>-->
 
             <div class="form-group">
                 <label for="action">Ação:</label>
                 <select id="action" name="action" class="form-control" required>
                     <option value="" selected="selected">Escolha uma ação</option>
                     <option value="get">Get Aluno Data</option>
-                    <option value="get2" disabled>Get Aluno De/Até</option>
+                    <option value="get2">Get Aluno De/Até</option>
                     <option value="import">Import Aluno Data</option>
                 </select>
             </div>
@@ -81,7 +81,7 @@
         });
     </script>
     
-    <!-- <script>
+    <!--<script>
         document.getElementById('action').addEventListener('change', function () {
             var additionalInputs = document.getElementById('additional-inputs');
             if (this.value === 'get2') {
@@ -91,7 +91,7 @@
             }
         });
 
-    </script> -->
+    </script>-->
 </body>
 
 </html>

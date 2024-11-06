@@ -248,8 +248,8 @@ class PostDiretorController extends Controller
         } elseif ($enrolStatus === '1') {
             $this->deleteGroup($groupId, $usrId);
         }
-
-        return 'Aluno Id= ' . $usrId . ' atualizado no curso: ' . $courseId . ' grupo: ' . $groupId;
+        return "Matriculado";
+        //return 'Aluno Id= ' . $usrId . ' atualizado no curso: ' . $courseId . ' grupo: ' . $groupId;
     }
 
     private function findGroupIdByName($groups, $name)
@@ -259,7 +259,6 @@ class PostDiretorController extends Controller
                 return $group->id;
             }
         }
-
         return null;
     }
 
@@ -276,7 +275,6 @@ class PostDiretorController extends Controller
         if ($groupId === null) {
             return $this->createGroup($courseId, $groupName);
         }
-
         return $groupId;
     }
 
@@ -372,12 +370,9 @@ class PostDiretorController extends Controller
 
         // Redirecionar para a rota correta
 
-
         if ($action === 'import') {
             return redirect()->route('import.diretor', ['username' => $username]);
         }
-
-
         return back()->withErrors(['message' => 'Ação inválida selecionada.']);
     }
 }

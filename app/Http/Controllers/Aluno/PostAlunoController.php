@@ -341,6 +341,7 @@ class PostAlunoController extends Controller
     public function handleForm(Request $request)
     {
         $date = $request->input('date');
+        $date2 = $request->input('extra_input');
         $action = $request->input('action');
 
         // Redirecionar para a rota correta
@@ -348,6 +349,8 @@ class PostAlunoController extends Controller
 
         if ($action === 'get') {
             return redirect()->route('get.aluno', ['date' => $date]);
+        } elseif ($action === 'get2') {
+            return redirect()->route('get.alunodate', ['date1' => $date, 'date2' => $date2] );
         } elseif ($action === 'import') {
             return redirect()->route('import.aluno', ['date' => $date]);
         }

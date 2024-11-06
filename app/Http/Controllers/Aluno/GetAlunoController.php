@@ -66,7 +66,8 @@ class GetAlunoController extends Controller
 
         $query = DB::table('students')->where('data', $date1)->first();
         if (isset($query)) {
-            return 'Data já importada ' . $date1;
+            $response = '<div class="alert alert-danger" role="alert"> Data já importada ' . $date1 . '</div>';
+            return view('aluno', compact('response'));
         }
 
         $startDate = $date1;
@@ -110,7 +111,9 @@ class GetAlunoController extends Controller
             }
             $currentDate = strtotime('+1 day', $currentDate);
         }
-        return response()->json(['message' => 'Dados salvos com sucesso! ']);
+        $response = '<div class="alert alert-success" role="alert">Dados salvos com sucesso! ALUNO: ' . $date1 . ' a ' . $date2 . '</div>';
+        return view('aluno', ['response' => $response]);
+
     }
 
     public function search(Request $request)

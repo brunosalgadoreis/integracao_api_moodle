@@ -65,7 +65,8 @@ class GetProfessorController extends Controller
 
         $query = DB::table('professors')->where('data', $date1)->first();
         if (isset($query)) {
-            return 'Data já importada ' . $date1;
+            $response = '<div class="alert alert-danger" role="alert"> Data já importada ' . $date1 . '</div>';
+            return view('professor', compact('response'));
         }
 
         $startDate = $date1;
@@ -106,7 +107,8 @@ class GetProfessorController extends Controller
             }
             $currentDate = strtotime('+1 day', $currentDate);
         }
-        return response()->json(['message' => 'Dados salvos com sucesso! ']);
+        $response = '<div class="alert alert-success" role="alert">Dados salvos com sucesso! PROFESSOR: ' . $date1 . ' a ' . $date2 . '</div>';
+        return view('professor', ['response' => $response]);
     }
 
     public function search(Request $request)

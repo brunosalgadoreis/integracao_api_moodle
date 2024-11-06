@@ -40,7 +40,7 @@ class PostProfessorController extends Controller
 
         $successCount = 0;
 
-        $csvFilePath = storage_path('app/public/professor'.$date.'.csv');
+        $csvFilePath = storage_path('app/public/professor' . $date . '.csv');
         $csvFile = fopen($csvFilePath, 'w');
 
         fputcsv($csvFile, ['EnrolStatus', 'ID Professor', 'Professor', 'ID Curso', 'Curso', 'ID Grupo', 'Grupo']);
@@ -419,10 +419,13 @@ class PostProfessorController extends Controller
     public function handleForm(Request $request)
     {
         $date = $request->input('date');
+        $date2 = $request->input('extra_input');
         $action = $request->input('action');
 
         if ($action === 'get') {
             return redirect()->route('get.professor', ['date' => $date]);
+        } elseif ($action === 'get2') {
+            return redirect()->route('get.professordate', ['date1' => $date, 'date2' => $date2]);
         } elseif ($action === 'import') {
             return redirect()->route('import.professor', ['date' => $date]);
         }
