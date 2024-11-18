@@ -18,15 +18,15 @@
                 <input type="text" id="date" name="date" class="form-control" required pattern="\d{2}-\d{2}-\d{4}"
                     placeholder="dd-mm-aaaa">
             </div>
-
-            <!--<div id="additional-inputs" style="display: none;">
+            <!-- Extra Input  -->
+            <div id="additional-inputs" style="display: none;">
                 <div class="form-group">
                     <label for="date2">Data Fim (dd-mm-aaaa):</label>
-                    <input type="text" id="extra-input" name="extra_input" class="form-control" required pattern="\d{2}-\d{2}-\d{4}"
+                    <input type="text" id="extra-input" name="extra_input" class="form-control" pattern="\d{2}-\d{2}-\d{4}"
                         placeholder="dd-mm-aaaa">
                 </div>
-            </div>-->
-
+            </div>
+            <!--   -->
             <div class="form-group">
                 <label for="action">Ação:</label>
                 <select id="action" name="action" class="form-control" required>
@@ -38,11 +38,15 @@
             </div>
             <button type="submit" class="btn btn-primary">Enviar</button>
         </form>
+
+        <!-- Loading  -->
         <div class="d-flex justify-content-center mt-2">
             <div id="loading-spinner" class="spinner-border" role="status" style="display: none;">
                 <span class="sr-only">Loading...</span>
             </div>
         </div>
+
+        <!-- Return  -->
         @isset($response)
             <div class="mt-4">
                 {!! $response !!}
@@ -56,16 +60,7 @@
         @endisset
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
-        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-        crossorigin="anonymous"></script>
-
+    <!-- Loading  -->
         <script>
         document.addEventListener("DOMContentLoaded", function () {
             const form = document.querySelector("form");
@@ -80,8 +75,10 @@
             });
         });
     </script>
+
+    <!-- Extra Input  -->
     
-    <!--<script>
+    <script>
         document.getElementById('action').addEventListener('change', function () {
             var additionalInputs = document.getElementById('additional-inputs');
             if (this.value === 'get2') {
@@ -91,7 +88,19 @@
             }
         });
 
-    </script>-->
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+
 </body>
 
 </html>
