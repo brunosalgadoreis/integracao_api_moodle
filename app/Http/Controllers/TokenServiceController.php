@@ -16,8 +16,8 @@ class TokenServiceController extends Controller
 
     //SEED
     public const TOKEN_SEED = 'TokenSeed';
-    public const API_PROF = 'https://api-eja-homolog.seed.pr.gov.br/Teacher/GetProfessor/';
-    public const API_STUD = 'https://api-eja-homolog.seed.pr.gov.br/Student/GetAluno/';
-    public const API_DIR = 'https://api-eja-homolog.seed.pr.gov.br/Diretor/GetDiretor/3';
-    public const API_TEC = 'https://api-eja-homolog.seed.pr.gov.br/Nre/GetAssistente/4';
+    public const API_PROF = 'https://api-address/Teacher/GetProfessor/';
+    public const API_STUD = 'https://api-address/Student/GetAluno/';
+    public const API_DIR = 'https://api-address/Diretor/GetDiretor/3';
+    public const API_TEC = 'https://api-address/Nre/GetAssistente/4';
 }
